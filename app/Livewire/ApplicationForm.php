@@ -63,11 +63,11 @@ class ApplicationForm extends Component
         ];
 
         if ($this->id_document) {
-            $data['id_document_path'] = $this->id_document->store('documents', 'private');
+            $data['id_document_path'] = $this->id_document->store('documents', 'local');
         }
 
         if ($this->transcript) {
-            $data['transcript_path'] = $this->transcript->store('documents', 'private');
+            $data['transcript_path'] = $this->transcript->store('documents', 'local');
         }
 
         $application = $service->submit($data);
