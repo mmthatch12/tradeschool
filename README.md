@@ -93,31 +93,41 @@ The queue connection is `database` locally. In production, swap to Redis + Horiz
 
 ## Local Setup
 
+A `.env.example` file is included with all the defaults pre-configured for local development. Copy it, generate a key, and you're ready to go.
+
 ```bash
-# 1. Install PHP dependencies
+# 1. Clone the repo
+git clone https://github.com/mmthatch12/tradeschool.git
+cd tradeschool
+
+# 2. Install PHP dependencies
 composer install
 
-# 2. Copy environment and generate key
+# 3. Copy the environment file and generate an app key
 cp .env.example .env
 php artisan key:generate
 
-# 3. Create the SQLite database file and run migrations + seed
+# 4. Create the SQLite database file and run migrations + seed
 touch database/database.sqlite
 php artisan migrate --seed
 
-# 4. Install JS dependencies and build assets
+# 5. Install JS dependencies and build assets
 npm install && npm run build
 
-# 5. Start the dev server
+# 6. Start the dev server
 php artisan serve
 ```
+
+The app will be available at `http://localhost:8000`.
+
+> **Note:** The `.env.example` includes comments explaining how to switch to MySQL, enable Mailpit for email previews, and configure Redis for queues. No changes are needed to get the demo running locally.
 
 ### Demo Credentials
 | URL | Credential |
 |---|---|
 | `http://localhost:8000/admin` | `admin@apextrade.test` / `password` |
 | `http://localhost:8000/apply` | No login — public form |
-| `http://localhost:8000/portal/{token}` | Get token from a Student record in the admin |
+| `http://localhost:8000/portal/{token}` | Get a token by approving an application in the admin, then viewing the Student record |
 
 ---
 
