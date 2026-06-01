@@ -71,6 +71,13 @@ The queue connection is `database` locally. In production, swap to Redis + Horiz
 
 ---
 
+## Requirements
+
+- PHP 8.4+
+- Composer
+- Node.js 18+
+- SQLite (included with most PHP installs — no separate DB server needed)
+
 ## Local Setup
 
 ```bash
@@ -81,7 +88,8 @@ composer install
 cp .env.example .env
 php artisan key:generate
 
-# 3. Migrate and seed (creates demo school, programs, students, admin user)
+# 3. Create the SQLite database file and run migrations + seed
+touch database/database.sqlite
 php artisan migrate --seed
 
 # 4. Install JS dependencies and build assets
