@@ -23,22 +23,35 @@ A Laravel SaaS demo application showcasing a trade school's enrollment and tuiti
 
 ## Features
 
-### Public Portal (no login required)
-- **Application form** — multi-field enrollment application with document upload (ID, transcripts)
-- **Application status page** — tokenized URL lets applicants track their status without an account
-- **Student payment portal** — tokenized URL grants enrolled students access to their payment dashboard
+### Student Application Flow (`/apply`)
 
-### Student Payment Dashboard
-- View tuition balance, payment schedule, and progress bar
-- Set up a monthly / bi-weekly / weekly installment plan
-- Pay individual installments (mock gateway — always succeeds, returns `MOCK-{txn_id}`)
+A prospective student fills out an enrollment application — name, contact info, program of interest, desired start date, and optional document uploads (government ID and transcripts). On submission, a unique `application_token` is generated and the student receives a confirmation email (logged locally in dev). They can return to `/apply/{token}/status` at any time to check their review status without creating an account.
+
+Once an admin approves their application:
+- A **Student** record is created (or matched by email if they applied before)
+- An **Enrollment** is created for the selected program
+- A `portal_token` (UUID) is generated and the student can access their payment portal at `/portal/{token}`
+
+The status page automatically surfaces the portal link once approval happens.
+
+### Student Payment Portal (`/portal/{token}`)
+
+Enrolled students manage their tuition entirely from a single tokenized page — no password required:
+
+- **Payment plan setup** — choose total amount, number of installments (1–60), and frequency (monthly, bi-weekly, or weekly). The schedule is generated upfront so students can see every due date before committing.
+- **Progress bar** — shows dollars paid vs. total tuition at a glance
+- **Pay now** — each pending or overdue installment has a "Pay Now" button. A modal confirms the amount and lets the student pick a payment method. The mock gateway always succeeds and returns a `MOCK-{txn_id}` transaction ID.
+- **Payment history** — paid installments show the date paid and method used
 
 ### Filament Admin Panel (`/admin`)
-- **Applications** — list, review, approve (auto-creates Student + Enrollment + portal token), or deny with notes
-- **Students** — full CRUD, enrollment count
-- **Enrollments** — create from admin, inline "Setup Payment Plan" action
-- **Payments** — list all payments with "Mark Paid" row action
-- **Dashboard** — stats widget showing pending applications, active enrollments, overdue payments, and monthly revenue
+
+Admins manage the full enrollment lifecycle from a Filament 5 panel:
+
+- **Dashboard** — live stats widget: pending application count, active enrollments, overdue payment count, and revenue collected this month
+- **Applications** — searchable/filterable list with inline **Approve** and **Deny** row actions. Approving triggers the full student + enrollment creation in one click. Denying prompts for a reason which is stored and shown to the applicant. Uploaded documents (ID, transcripts) can be downloaded directly from the list or the detail view.
+- **Students** — full CRUD with enrollment count per student
+- **Enrollments** — create enrollments manually, view status, and set up payment plans inline via an action form without leaving the list
+- **Payments** — view all installments across all students with status badges (paid / pending / overdue). Admins can mark any payment as paid and select the payment method — useful for cash or check payments made in person.
 
 ---
 
