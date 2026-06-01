@@ -15,7 +15,7 @@ return new class extends Migration
             $table->text('description');
             $table->integer('duration_weeks');
             $table->decimal('tuition_cost', 10, 2);
-            $table->date('start_date');
+            $table->date('start_date')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
