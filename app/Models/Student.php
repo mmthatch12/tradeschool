@@ -20,6 +20,7 @@ class Student extends Model
         'state',
         'zip',
         'notes',
+        'portal_token',
     ];
 
     protected function casts(): array

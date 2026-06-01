@@ -21,6 +21,7 @@ class Application extends Model
         'id_document_path',
         'transcript_path',
         'notes',
+        'application_token',
         'reviewed_by',
         'reviewed_at',
     ];
