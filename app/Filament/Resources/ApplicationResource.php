@@ -18,6 +18,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ApplicationResource extends Resource
 {
@@ -144,6 +145,20 @@ class ApplicationResource extends Resource
                             ->success()
                             ->send();
                     }),
+
+                Action::make('download_id')
+                    ->label('Download ID')
+                    ->icon('heroicon-o-identification')
+                    ->color('gray')
+                    ->visible(fn (Application $record): bool => (bool) $record->id_document_path)
+                    ->action(fn (Application $record) => Storage::disk('local')->download($record->id_document_path)),
+
+                Action::make('download_transcript')
+                    ->label('Download Transcript')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->color('gray')
+                    ->visible(fn (Application $record): bool => (bool) $record->transcript_path)
+                    ->action(fn (Application $record) => Storage::disk('local')->download($record->transcript_path)),
 
                 Action::make('edit')
                     ->url(fn (Application $record): string => ApplicationResource::getUrl('edit', ['record' => $record]))
